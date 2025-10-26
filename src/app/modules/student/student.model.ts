@@ -5,6 +5,7 @@ import {
   StudentName,
   Student,
 } from './student.interface';
+import validator from 'validator';
 
 // Name Schema
   const UserNameSchema = new Schema<StudentName>({
@@ -16,13 +17,6 @@ import {
       ],
       maxLength: [20, "First Name can not be more than 20 characters."],
       trim: true,
-      validate: {
-        validator: function(value){
-        const firstNameStr = value.charAt(0).toUpperCase() + value.slice(1);
-        return firstNameStr === value;
-      },
-      message: "{VALUE} is not in capitalize format."
-      }
     },
     middleName: {
       type: String,
@@ -156,6 +150,10 @@ const StudentSchema = new Schema<Student>({
       true,
       'Email address is required! Please provide a valid email.',
     ],
+    validate: {
+      validator: (value: string) => validator.isEmail(value),
+      message: '{VALUE} is not valid!'
+    },
     unique: true,
   },
   bloodGroup: {
